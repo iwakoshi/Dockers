@@ -25,6 +25,7 @@ RUN apt-get update \
  && adduser --disabled-password --quiet --gecos '' eclipse \
  && chown -R root:eclipse $INSTALLATION_DIR/eclipse \
  && chmod -R 775 $INSTALLATION_DIR/eclipse \
+ && sed -i -e s/'--launcher.appendVmargs'/'--launcher.GTK_version\n2\n--launcher.appendVmargs'/g $INSTALLATION_DIR/eclipse/eclipse.ini \
  \
  && rm /usr/sbin/apt-add-repository \
  && apt-get --purge autoremove -y curl libxml2-utils \
