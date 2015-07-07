@@ -21,7 +21,6 @@ RUN apt-get update \
  \
  && RELEASE=$(curl -s -G -L "$RELEASE_ECLIPSE"release.xml | xmllint --xpath '//present' - | sed '/^\/ >/d' | sed 's/<[^>]*.//g') \
  && RELEASE_HIFEN=$(echo $RELEASE | sed -e "s/\//-/g") \
- && mkdir $INSTALLATION_DIR \
  && curl "$RELEASE_ECLIPSE$RELEASE$ECLIPSE_JEE$RELEASE_HIFEN$ECLIPSE_LINUX" | tar vxz -C $INSTALLATION_DIR \
  && adduser --disabled-password --quiet --gecos '' eclipse \
  && chown -R root:eclipse $INSTALLATION_DIR/eclipse \
