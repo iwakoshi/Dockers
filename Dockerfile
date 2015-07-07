@@ -31,4 +31,4 @@ RUN apt-get update \
  && apt-get clean
 
 USER eclipse
-ENTRYPOINT INSTALLATION_DIR/eclipse/eclipse
+ENTRYPOINT $INSTALLATION_DIR/eclipse/eclipse
