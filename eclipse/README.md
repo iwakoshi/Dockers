@@ -2,7 +2,7 @@
 
 ## Usage
 
-Create a eclipse.sh
+Create an eclipse.sh
 ```bash
 #!/bin/bash
 
