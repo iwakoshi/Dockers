@@ -4,7 +4,7 @@ MAINTAINER Fabio Iwakoshi <fabio.iwakoshi@gmail.com>
 
 ENV RELEASE_ECLIPSE http://download.eclipse.org/technology/epp/downloads/release/
 ENV ECLIPSE_JEE /eclipse-jee-
-ENV ECLIPSE_LINUX -linux-gtk.tar.gz
+ENV ECLIPSE_LINUX -linux-gtk-x86_64.tar.gz
 ENV INSTALLATION_DIR /opt
 
 RUN apt-get update \
