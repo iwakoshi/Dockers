@@ -6,6 +6,7 @@ ENV INSTALLATION_DIR /opt
 
 RUN apt-get update \
  && apt-get install curl -y \
+ \
  && curl -s https://raw.githubusercontent.com/iwakoshi/linux/master/add-apt-repository.sh -o /usr/sbin/apt-add-repository \
  && chmod +x /usr/sbin/apt-add-repository \
  && apt-add-repository ppa:webupd8team/java
@@ -19,23 +20,20 @@ RUN RELEASE=$(curl -s -G -L http://download.eclipse.org/technology/epp/downloads
  && RELEASE_HIFEN=$(echo $RELEASE | sed -e "s/\//-/g") \
  && curl "http://download.eclipse.org/technology/epp/downloads/release/${RELEASE}/eclipse-jee-${RELEASE_HIFEN}-linux-gtk-x86_64.tar.gz" | tar vxz -C $INSTALLATION_DIR
 
-RUN export uid=1000 gid=1000 \
- && echo "eclipse:x:${uid}:${gid}:Developer,,,:/home/eclipse:/bin/bash" >> /etc/passwd \
- && echo "eclipse:x:${uid}:" >> /etc/group \
- && echo "eclipse ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers \
- && chmod 0440 /etc/sudoers \
- && chown -R ${uid}:${gid} $INSTALLATION_DIR/eclipse \
- && chmod -R 775 $INSTALLATION_DIR/eclipse \
- && $(sed -i -e s/'--launcher.appendVmargs'/'--launcher.GTK_version\n2\n--launcher.appendVmargs'/g $INSTALLATION_DIR/eclipse/eclipse.ini) \
+RUN adduser --disabled-password --quiet --gecos '' eclipse \
+ && chown -R root:eclipse $INSTALLATION_DIR/eclipse \
+ && chmod -R 777 $INSTALLATION_DIR/eclipse \
+ && $(sed -i -e s/'--launcher.appendVmargs'/'--launcher.GTK_version\n2\n--launcher.appendVmargs'/g $INSTALLATION_DIR/eclipse/eclipse.ini)
+
+RUN apt-get install libswt-gtk-3-java -y \
  && rm /usr/sbin/apt-add-repository \
  && apt-get --purge autoremove -y curl libxml2-utils \
  && apt-get clean
 
-RUN apt-get install libswt-gtk-3-java -y \
- && mkdir -p /home/eclipse/workspace \
- && chown -R ${uid}:${gid} /home/eclipse/workspace
+USER eclipse
 
-VOLUME ["/home/eclipse/workspace"]
+WORKDIR ~/
 
-# Autorun
+VOLUME ["~/workspace"]
+
 ENTRYPOINT $INSTALLATION_DIR/eclipse/eclipse
